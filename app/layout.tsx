@@ -12,7 +12,15 @@ import { Providers } from './providers'
 // (`font-sans` / `font-serif`) yang serupa secara visual dan selalu
 // tersedia offline, tanpa risiko build gagal karena fetch font.
 
-const WEBSITE_URL = process.env.NEXT_PUBLIC_WEBSITE_URL || 'https://www.gojelantah.id/'
+// Domain produksi: https://gojelantah.vercel.app/ (dikonfirmasi user pas
+// setup SEO) — dipakai sebagai fallback kalau env var `NEXT_PUBLIC_
+// WEBSITE_URL` belum di-set di Vercel. Begitu user pindah ke domain
+// sendiri (mis. gojelantah.id), cukup set env var itu di Vercel project
+// settings, SEMUA metadata/sitemap/robots/JSON-LD di bawah otomatis ikut
+// pakai domain baru tanpa perlu edit kode lagi.
+const WEBSITE_URL = (process.env.NEXT_PUBLIC_WEBSITE_URL || 'https://gojelantah.vercel.app').replace(/\/$/, '')
+
+const OG_IMAGE_URL = `${WEBSITE_URL}/images/og-image.jpg`
 
 export const metadata: Metadata = {
   metadataBase: new URL(WEBSITE_URL),
@@ -31,8 +39,13 @@ export const metadata: Metadata = {
     'harga minyak jelantah',
     'pengepul minyak jelantah',
     'minyak jelantah jakarta',
+    'minyak jelantah bogor',
+    'minyak jelantah depok',
+    'minyak jelantah tangerang',
+    'minyak jelantah bekasi',
     'minyak jelantah jadi biodiesel',
     'jasa jemput jelantah',
+    'jual beli jelantah jabodetabek',
     'gojelantah',
   ],
 
@@ -48,6 +61,22 @@ export const metadata: Metadata = {
     title: 'GoJelantah — Jemput & Beli Minyak Jelantah Se-Jabodetabek',
     description:
       'Jemput gratis, bayar tunai di tempat, harga flat Rp 7.500/liter. Reservasi lewat WhatsApp, secepat klik.',
+    images: [
+      {
+        url: OG_IMAGE_URL,
+        width: 1200,
+        height: 630,
+        alt: 'GoJelantah — Jemput Jelantah, Secepat Klik',
+      },
+    ],
+  },
+
+  twitter: {
+    card: 'summary_large_image',
+    title: 'GoJelantah — Jemput & Beli Minyak Jelantah Se-Jabodetabek',
+    description:
+      'Jemput gratis, bayar tunai di tempat, harga flat Rp 7.500/liter. Reservasi lewat WhatsApp, secepat klik.',
+    images: [OG_IMAGE_URL],
   },
 
   robots: {
@@ -67,6 +96,11 @@ export const metadata: Metadata = {
   },
 
   category: 'business',
+
+  // `verification` — placeholder kosong sengaja gak diisi kode verifikasi
+  // palsu. User perlu isi sendiri lewat Google Search Console (Settings >
+  // Ownership verification > HTML tag), lalu tempel kode-nya di sini,
+  // mis. verification: { google: 'kode-dari-search-console' }.
 }
 
 export const viewport: Viewport = {
@@ -95,11 +129,15 @@ export default function RootLayout({
             __html: JSON.stringify({
               '@context': 'https://schema.org',
               '@type': 'LocalBusiness',
+              '@id': `${WEBSITE_URL}/#business`,
               name: 'GoJelantah',
               description:
                 'Jasa jemput dan beli minyak jelantah se-Jabodetabek. Jemput gratis, bayar tunai di tempat, harga flat Rp 7.500/liter.',
               url: WEBSITE_URL,
+              image: OG_IMAGE_URL,
+              logo: `${WEBSITE_URL}/icon.png`,
               telephone: '+6281212084742',
+              priceRange: 'Rp 7.500/liter',
               address: {
                 '@type': 'PostalAddress',
                 streetAddress: 'Jl. I Gusti Ngurah Rai No.20C, RT.8/RW.6, Cipinang Muara',
@@ -108,7 +146,30 @@ export default function RootLayout({
                 postalCode: '13420',
                 addressCountry: 'ID',
               },
-              priceRange: 'Rp 7.500/liter',
+              // Area layanan — ikut di JSON-LD juga (bukan cuma di konten
+              // visual) biar Google lebih yakin situs ini relevan buat
+              // pencarian lokal se-5-kota, gak cuma Jakarta.
+              areaServed: [
+                { '@type': 'City', name: 'Jakarta' },
+                { '@type': 'City', name: 'Bogor' },
+                { '@type': 'City', name: 'Depok' },
+                { '@type': 'City', name: 'Tangerang' },
+                { '@type': 'City', name: 'Bekasi' },
+              ],
+              openingHoursSpecification: [
+                {
+                  '@type': 'OpeningHoursSpecification',
+                  dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+                  opens: '08:00',
+                  closes: '17:00',
+                },
+                {
+                  '@type': 'OpeningHoursSpecification',
+                  dayOfWeek: ['Saturday'],
+                  opens: '08:00',
+                  closes: '12:00',
+                },
+              ],
             }),
           }}
         />
