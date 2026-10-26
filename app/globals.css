@@ -1,0 +1,654 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply scroll-smooth;
+  }
+  /* Base warna halaman — warna solid fallback aja di sini (bukan gradient
+     lagi). Alasannya: `body` BUKAN elemen yang discroll di layout ini
+     (yang scroll itu `<main>`, lihat app/layout.tsx), jadi dulu gradient
+     di body gak pernah "ikut jalan" pas discroll — hasilnya tiap kali
+     discroll ke bawah, bagian bawah layar SELALU nunjukkin ujung-gradient
+     yang nyaris putih, padahal secara konten itu masih di tengah halaman.
+     Gradient hijau yang beneran "jalan" bareng konten sekarang dipasang di
+     `.main-scroll-bg` (dipakai di `<main>`, pakai background-attachment:
+     local supaya background-nya scroll BARENG isinya, bukan diem kayak
+     nempel di viewport). */
+  body {
+    @apply bg-[#cdecd9] dark:bg-[#07140f] text-[#0f1a16] dark:text-[#eef7f1] antialiased;
+    font-feature-settings: "ss01", "ss02", "cv01", "cv02";
+  }
+  ::selection {
+    @apply bg-emerald-400/30 text-white dark:text-[#0a140f];
+  }
+
+  /* Focus ring global — pakai warna aksen hijau (GoJelantah), biar
+     konsisten & gampang keliatan pas dinavigasi pakai keyboard (Tab). */
+  :focus-visible {
+    outline: 2px solid #059669;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+/* ========================================================
+   PREFERS-REDUCED-MOTION
+========================================================= */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ========================================================
+   NO TRANSITION — buat disable transisi pas ganti theme
+========================================================= */
+.no-transition *,
+.no-transition,
+.no-transition html,
+.no-transition body,
+.no-transition main {
+  transition: none !important;
+  animation: none !important;
+}
+
+@layer components {
+  .glass-premium {
+    @apply bg-white/70 dark:bg-surface-dark/70 backdrop-blur-xl border border-gray-200/50 dark:border-white/5;
+  }
+  /* Kartu "kaca" — translucent + backdrop-blur (glassmorphism), BUKAN
+     putih solid lagi. Alasannya: background halaman sekarang hijau pekat
+     di semua tempat, jadi kartu putih solid bakal kelihatan kayak "lubang
+     putih" yang motong warna hijau. Dengan transparan + blur, warna hijau
+     di belakang tetep ngintip lembut lewat kartu — kartu jadi nyatu sama
+     halaman, bukan nutupin. */
+  .glass-card {
+    @apply bg-white/55 dark:bg-white/[0.06] backdrop-blur-xl border border-white/60 dark:border-white/10 rounded-2xl
+           hover:border-white/80 dark:hover:border-white/20 transition-all duration-300
+           hover:shadow-lg hover:shadow-emerald-900/10 dark:hover:shadow-black/30;
+  }
+  /* "Frame" mengambang — referensi dari desain lama user: kartu putih/kaca
+     bersih dengan sudut besar & shadow tebal yang "melayang" di atas foto
+     latar, bukan nempel rata kayak glass-card biasa. Dipakai buat elemen
+     yang perlu nonjol kuat (kalkulator harga). */
+  .frame-card {
+    @apply relative rounded-[28px] sm:rounded-[32px] overflow-hidden
+           bg-white/85 dark:bg-[#0b1f16]/80 backdrop-blur-2xl
+           border border-white/80 dark:border-white/10
+           shadow-[0_32px_80px_-24px_rgba(6,40,25,0.4)] dark:shadow-[0_32px_80px_-24px_rgba(0,0,0,0.65)];
+  }
+  .gradient-text-gold {
+    @apply bg-gradient-to-r from-gold via-gold-light to-amber-300 bg-clip-text text-transparent;
+  }
+  .gradient-text-brand {
+    @apply text-gray-900 dark:text-white;
+  }
+  .btn-brand {
+    @apply relative overflow-hidden bg-gray-900 dark:bg-white
+           text-white dark:text-gray-900 font-semibold px-6 py-3 rounded-xl
+           transition-all duration-300 hover:bg-gray-800 dark:hover:bg-gray-100 hover:scale-[1.02]
+           active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  /* CTA utama — hijau GoJelantah, dipakai buat "Jemput Jelantah Saya" dst. */
+  .btn-primary {
+    @apply relative overflow-hidden bg-gradient-to-r from-accent to-accent-light
+           text-white font-semibold px-6 py-3 rounded-xl
+           transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_8px_30px_-8px_rgba(5,150,105,0.4)]
+           active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  /* CTA sekunder — emas, dipakai buat highlight "nilai" (harga, estimasi payout). */
+  .btn-gold {
+    @apply relative overflow-hidden bg-gradient-to-r from-gold to-gold-light
+           text-white font-semibold px-6 py-3 rounded-xl
+           transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_8px_30px_-8px_rgba(245,158,11,0.4)]
+           active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .badge {
+    @apply px-3 py-0.5 rounded-full text-[10px] font-medium tracking-wide;
+  }
+  .badge-pending { @apply bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-white/5; }
+  .badge-processing { @apply bg-amber-100 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-500/20; }
+  .badge-done { @apply bg-emerald-100 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20; }
+  .badge-failed { @apply bg-gray-100 dark:bg-gray-500/10 text-gray-700 dark:text-gray-400 border border-gray-200 dark:border-gray-500/20; }
+
+  /* "Frame" bernilai — dipakai buat bungkus angka harga/estimasi payout,
+     gradasi hijau→emas biar kerasa "jelantah jadi duit". */
+  /* Dulu pakai background krem/putih solid (`from-amber-50 via-white...`)
+     — begitu halaman jadi hijau penuh (Round 2), kotak ini jadi kayak
+     "lubang putih" yang nabrak di tengah/ujung halaman, bukan cuma di
+     kalkulator doang (dipakai juga di CTA akhir tiap halaman). Sekarang
+     materinya disamain sama `.glass-card` (translucent + backdrop-blur),
+     cuma tintnya dihangetin dikit ke arah emas biar tetep kerasa "spesial/
+     highlight" dibanding glass-card biasa — bukan material putih yang
+     beda sendiri. */
+  .value-frame {
+    @apply relative rounded-2xl overflow-hidden border border-accent/25 dark:border-accent/15
+           shadow-[0_0_60px_-12px_rgba(5,150,105,0.25)] dark:shadow-[0_0_60px_-12px_rgba(5,150,105,0.12)]
+           bg-gradient-to-br from-accent/10 dark:from-accent/10 via-white/40 dark:via-white/[0.04] to-gold/10 dark:to-gold/5
+           backdrop-blur-xl;
+  }
+  .value-frame::before {
+    content: '';
+    @apply absolute -inset-[2px] rounded-2xl bg-gradient-to-r from-accent/25 via-transparent to-gold/25
+           -z-10 blur-sm;
+  }
+}
+
+/* ========================================================
+   ANIMATIONS
+========================================================= */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+.animate-float { animation: float 5s ease-in-out infinite; }
+
+/* ========================================================
+   THEME TRANSITIONS
+========================================================= */
+html {
+  color-scheme: light;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+html.dark {
+  color-scheme: dark;
+}
+
+html,
+body,
+main {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+* {
+  transition-property: background-color, color, border-color, box-shadow;
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
+}
+
+.no-transition *,
+.no-transition {
+  transition: none !important;
+}
+
+.gradient-text-sky {
+  @apply bg-gradient-to-r from-emerald-500 to-accent bg-clip-text text-transparent;
+}
+
+/* ========================================================
+   Premium Noise
+========================================================= */
+.bg-noise {
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(0, 0, 0, .08) 1px, transparent 1px),
+    radial-gradient(circle at 80% 80%, rgba(0, 0, 0, .05) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.dark .bg-noise {
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(255,255,255,.08) 1px, transparent 1px),
+    radial-gradient(circle at 80% 80%, rgba(255,255,255,.05) 1px, transparent 1px);
+}
+
+/* ========================================================
+   SHIMMER
+========================================================= */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-shimmer {
+  background-size: 200% 100%;
+  animation: shimmer 1.8s ease-in-out infinite;
+}
+
+/* ========================================================
+   SCROLLBAR
+========================================================= */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.1);
+  border-radius: 4px;
+}
+.dark .scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.1);
+}
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(0,0,0,0.2);
+}
+.dark .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+/* ========================================================
+   ANIMATIONS LAIN
+========================================================= */
+@keyframes pulse-slow {
+  0%, 100% { transform: scale(1) translate(0, 0); }
+  50% { transform: scale(1.2) translate(20px, -30px); }
+}
+.animate-pulse-slow {
+  animation: pulse-slow 8s ease-in-out infinite;
+}
+.animate-pulse-slow-reverse {
+  animation: pulse-slow 10s ease-in-out infinite reverse;
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spin-fast {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 8s linear infinite;
+}
+
+.animate-spin-fast {
+  animation: spin-fast 3s linear infinite;
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes shimmer-bg {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.8); opacity: 0.8; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+
+@keyframes count-up {
+  from { opacity: 0; transform: scale(0.5); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.8s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out forwards;
+}
+
+.animate-shimmer-bg {
+  background-size: 200% auto;
+  animation: shimmer-bg 3s linear infinite;
+}
+
+.animate-count-up {
+  animation: count-up 0.6s ease-out forwards;
+}
+
+/* Stagger children */
+.stagger-children > * {
+  opacity: 0;
+  animation: fade-up 0.6s ease-out forwards;
+}
+.stagger-children > *:nth-child(1) { animation-delay: 0.1s; }
+.stagger-children > *:nth-child(2) { animation-delay: 0.2s; }
+.stagger-children > *:nth-child(3) { animation-delay: 0.3s; }
+.stagger-children > *:nth-child(4) { animation-delay: 0.4s; }
+.stagger-children > *:nth-child(5) { animation-delay: 0.5s; }
+.stagger-children > *:nth-child(6) { animation-delay: 0.6s; }
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== DARK MODE SUPPORT ===== */
+.dark {
+  color-scheme: dark;
+}
+
+.dark .bg-white {
+  background-color: #0e1a15 !important;
+}
+
+.dark .text-gray-900 {
+  color: #f1f8f4 !important;
+}
+
+.dark .text-gray-700 {
+  color: #c9dcd2 !important;
+}
+
+.dark .text-gray-600 {
+  color: #93ab9f !important;
+}
+
+.dark .text-gray-500 {
+  color: #6b8277 !important;
+}
+
+/* ========================================================
+   MARQUEE — buat carousel testimoni/gallery jerigen yang auto-scroll
+========================================================= */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 40s linear infinite;
+}
+.group:hover .animate-marquee,
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* ========================================================
+   DRIFT — gerakan organik buat blob gradient di background
+========================================================= */
+@keyframes drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(4%, -6%) scale(1.08); }
+  66% { transform: translate(-3%, 4%) scale(0.95); }
+}
+.animate-drift { animation: drift 16s ease-in-out infinite; }
+.animate-drift-slow { animation: drift 24s ease-in-out infinite; }
+.animate-drift-reverse { animation: drift 20s ease-in-out infinite reverse; }
+
+/* ========================================================
+   BOB — floating naik-turun lembut, dipakai buat ikon jerigen/badge
+========================================================= */
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+}
+.animate-bob { animation: bob 4.5s ease-in-out infinite; }
+
+/* ========================================================
+   MESH MOVE — background gradient hero yang bergerak pelan
+========================================================= */
+@keyframes mesh-move {
+  0%, 100% { background-position: 0% 0%, 100% 100%, 50% 50%; }
+  50% { background-position: 100% 50%, 0% 50%, 30% 70%; }
+}
+.animate-mesh { animation: mesh-move 18s ease-in-out infinite; background-size: 180% 180%; }
+
+/* ========================================================
+   GLOW PULSE — buat titik/ornamen kecil yang berkedip halus
+========================================================= */
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.3); }
+}
+.animate-glow-pulse { animation: glow-pulse 2.4s ease-in-out infinite; }
+
+/* =========================================================
+   DROPDOWN IN — buka popover/menu, scale + fade cepat
+========================================================= */
+@keyframes dropdown-in {
+  from { opacity: 0; transform: scale(0.95) translateY(-4px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.animate-dropdown-in {
+  animation: dropdown-in 0.16s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Grain overlay */
+.bg-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 200px;
+  background-repeat: repeat;
+  pointer-events: none;
+}
+
+/* ========================================================
+   SCROLL PROGRESS BAR — global di layout.tsx, muncul di semua halaman.
+   Gradien hijau→emas, ngikutin tema GoJelantah ("jelantah jadi berharga").
+========================================================= */
+.scroll-progress-track {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 200;
+  background: transparent;
+  pointer-events: none;
+}
+.scroll-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #34d399 0%, #059669 60%, #f59e0b 100%);
+  box-shadow: 0 0 12px rgba(5, 150, 105, 0.4);
+  transition: width 0.1s linear;
+}
+
+/* ========================================================
+   AKSEN HIJAU — warna aksen utama GoJelantah. Dipakai seperlunya buat
+   badge/CTA/state aktif.
+========================================================= */
+.badge-accent {
+  @apply bg-emerald-50 dark:bg-emerald-500/10 border-emerald-200 dark:border-emerald-500/20 text-emerald-700 dark:text-emerald-300;
+}
+.badge-gold {
+  @apply bg-amber-50 dark:bg-amber-500/10 border-amber-200 dark:border-amber-500/20 text-amber-700 dark:text-amber-300;
+}
+.gradient-text-accent {
+  @apply text-accent dark:text-accent-light;
+}
+.btn-accent {
+  @apply relative overflow-hidden bg-white dark:bg-white/5 border border-gray-300 dark:border-white/15
+         text-gray-900 dark:text-white font-semibold px-6 py-3 rounded-xl
+         transition-all duration-300 hover:border-gray-400 dark:hover:border-white/30 hover:scale-[1.02]
+         active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed;
+}
+.ring-accent-hover {
+  @apply hover:border-emerald-400/40 dark:hover:border-emerald-400/30;
+}
+
+/* ========================================================
+   TINT SECTION — dipakai selang-seling antar section di tiap halaman
+   biar gak monoton (bukan deretan section putih-polos terus-terusan).
+   Cuma wash gradien tipis di atas base warna body, nyatu sama ambient
+   blob di app/layout.tsx, bukan blok warna solid.
+========================================================= */
+.section-tint-emerald {
+  background-image: linear-gradient(to bottom, rgba(16, 185, 129, 0.12), rgba(16, 185, 129, 0.03) 40%, transparent 85%);
+}
+.dark .section-tint-emerald {
+  background-image: linear-gradient(to bottom, rgba(16, 185, 129, 0.07), rgba(16, 185, 129, 0.02) 40%, transparent 85%);
+}
+.section-tint-gold {
+  background-image: linear-gradient(to bottom, rgba(245, 158, 11, 0.10), rgba(245, 158, 11, 0.025) 40%, transparent 85%);
+}
+.dark .section-tint-gold {
+  background-image: linear-gradient(to bottom, rgba(245, 158, 11, 0.06), rgba(245, 158, 11, 0.02) 40%, transparent 85%);
+}
+
+/* ========================================================
+   MAIN SCROLL BACKGROUND — gradient hijau yang BENERAN ikut
+   jalan pas discroll, dipasang langsung di <main> (elemen yang
+   punya overflow-y-auto di app/layout.tsx), bukan di <body>.
+   `background-attachment: local` adalah kuncinya: ini bikin
+   background ikut scroll bareng ISI elemen itu sendiri (beda
+   dari default `scroll` yang diem nempel di body/viewport, dan
+   beda dari `fixed` yang diem nempel di viewport juga). Dengan
+   `repeat-y` + tile besar, gradasinya terus berulang dengan
+   mulus sepanjang apapun tinggi halamannya, jadi gak akan ada
+   lagi titik di mana scroll ke bawah ketemu "putih polos" —
+   setiap posisi scroll selalu ada di tengah salah satu tile
+   gradasi hijau. */
+.main-scroll-bg {
+  background-attachment: local;
+  background-repeat: repeat-y;
+  background-size: 100% 1500px;
+  background-image: linear-gradient(
+    180deg,
+    #a9e2c1 0%,
+    #c3edd4 30%,
+    #d2f1dd 50%,
+    #c3edd4 70%,
+    #a9e2c1 100%
+  );
+
+  /* Tinggi `<main>` — dua baris `height` sengaja dipertahankan (bukan
+     cuma dvh): `100vh` di HP (terutama Safari/Chrome lama) dihitung
+     seolah address bar-nya SELALU tersembunyi, jadi pas address bar-nya
+     beneran kelihatan (kondisi normal pas halaman baru dibuka/discroll
+     ke atas), tinggi beneran yang kelihatan di layar lebih KECIL dari
+     100vh — <main> jadi kepanjangan dari viewport asli, bagian bawahnya
+     (termasuk CTA/tombol WA mengambang) bisa ketutup/terpotong browser
+     chrome, dan rasanya "aneh"/elemen kepotong pas discroll. `100dvh`
+     (dynamic viewport height) ngikutin tinggi viewport SEBENARNYA saat
+     itu, termasuk pas address bar collapse/expand pas discroll. Baris
+     `100vh` ditulis duluan sebagai fallback murni CSS — browser lama yang
+     gak ngerti unit `dvh` otomatis nolak baris keduanya (invalid value
+     di-skip pas parsing) dan tetap pakai baris vh; browser modern yang
+     ngerti `dvh` bakal pakai baris kedua (menang karena ditulis belakangan
+     dalam rule yang sama). */
+  height: calc(100vh - 60px);
+  height: calc(100dvh - 60px);
+
+  /* iOS momentum-scroll biar inersia-nya halus di dalam container custom
+     ini (bukan di <body>), plus `overscroll-behavior: contain` biar pas
+     scroll sampai mentok atas/bawah <main>, gesture-nya gak "nembus" ke
+     elemen luar (body/halaman) dan bikin efek mantul ganda yang aneh. */
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+}
+@media (min-width: 640px) {
+  .main-scroll-bg {
+    height: calc(100vh - 72px);
+    height: calc(100dvh - 72px);
+  }
+}
+
+/* Wrapper terluar di app/layout.tsx — dulu pakai utility Tailwind
+   `h-screen` (= 100vh statis) langsung di JSX, sekarang dipindah ke sini
+   supaya bisa dikasih fallback dvh yang sama kayak `.main-scroll-bg` di
+   atas (alasan teknisnya sama persis: 100vh gak akurat di browser mobile
+   begitu address bar-nya kelihatan). */
+.app-shell {
+  height: 100vh;
+  height: 100dvh;
+}
+/* ========================================================
+   CALC SLIDER — slider custom buat kalkulator harga, biar gak kelihatan
+   kayak <input type="range"> bawaan browser yang polos/jadul. Track-nya
+   pakai gradient yang "keisi" sesuai value (lewat CSS var --fill yang
+   di-set inline dari komponen), thumb-nya bulat putih dengan cincin hijau
+   + shadow, biar kerasa kayak slider di app finansial modern.
+========================================================= */
+.calc-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 9999px;
+  background: linear-gradient(
+    to right,
+    #059669 0%,
+    #059669 var(--fill, 50%),
+    rgba(5, 150, 105, 0.15) var(--fill, 50%),
+    rgba(5, 150, 105, 0.15) 100%
+  );
+  outline: none;
+  cursor: pointer;
+}
+.dark .calc-slider {
+  background: linear-gradient(
+    to right,
+    #34d399 0%,
+    #34d399 var(--fill, 50%),
+    rgba(52, 211, 153, 0.18) var(--fill, 50%),
+    rgba(52, 211, 153, 0.18) 100%
+  );
+}
+.calc-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 9999px;
+  background: #ffffff;
+  border: 4px solid #059669;
+  box-shadow: 0 2px 10px rgba(5, 150, 105, 0.45);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+.calc-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.12);
+}
+.dark .calc-slider::-webkit-slider-thumb {
+  background: #0b1f16;
+  border-color: #34d399;
+  box-shadow: 0 2px 12px rgba(52, 211, 153, 0.5);
+}
+.calc-slider::-moz-range-track {
+  height: 8px;
+  border-radius: 9999px;
+  background: rgba(5, 150, 105, 0.15);
+}
+.dark .calc-slider::-moz-range-track {
+  background: rgba(52, 211, 153, 0.18);
+}
+.calc-slider::-moz-range-progress {
+  height: 8px;
+  border-radius: 9999px;
+  background: #059669;
+}
+.dark .calc-slider::-moz-range-progress {
+  background: #34d399;
+}
+.calc-slider::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 9999px;
+  background: #ffffff;
+  border: 4px solid #059669;
+  box-shadow: 0 2px 10px rgba(5, 150, 105, 0.45);
+  cursor: pointer;
+}
+.dark .calc-slider::-moz-range-thumb {
+  background: #0b1f16;
+  border-color: #34d399;
+}
+
+.dark .main-scroll-bg {
+  background-image: linear-gradient(
+    180deg,
+    #081a12 0%,
+    #0d2a1c 30%,
+    #113524 50%,
+    #0d2a1c 70%,
+    #081a12 100%
+  );
+}
