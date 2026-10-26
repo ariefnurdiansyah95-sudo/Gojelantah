@@ -9,6 +9,7 @@ import { useTheme } from '@/context/ThemeContext'
 const MENU_LINKS = [
   { href: '/', label: 'Beranda' },
   { href: '/tentang', label: 'Tentang' },
+  { href: '/mitra-bisnis', label: 'Mitra Bisnis' },
   { href: '/artikel', label: 'Artikel' },
   { href: '/kontak', label: 'Kontak' },
 ]

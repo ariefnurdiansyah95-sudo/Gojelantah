@@ -2,13 +2,19 @@
 
 import { Suspense, useMemo, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { Droplets, MapPin, CalendarClock, CheckCircle2, MessageCircle, ArrowRight, ArrowLeft, User } from 'lucide-react'
+import { Droplets, MapPin, CalendarClock, CheckCircle2, MessageCircle, ArrowRight, ArrowLeft, User, Wallet } from 'lucide-react'
 import Reveal from '@/components/Reveal'
 import { SITE, buildWhatsAppLink, formatRupiah } from '@/lib/site'
 
 const STEP_LABELS = ['Jumlah & Lokasi', 'Jadwal', 'Konfirmasi']
 
 const TIME_SLOTS = ['08.00 – 10.00', '10.00 – 12.00', '13.00 – 15.00', '15.00 – 17.00']
+
+// Opsi metode pembayaran — sengaja TIDAK nampilin nomor rekening/e-wallet
+// asli di web (keputusan user): buat Transfer/E-Wallet, detail nomor
+// rekening/akun dikonfirmasi admin langsung via WhatsApp pas reservasi
+// dijadwalkan, bukan dicantumin publik di sini.
+const PAYMENT_METHODS = ['Tunai (Cash)', 'Transfer Bank', 'E-Wallet (GoPay/OVO/DANA, dll)']
 
 function todayISO() {
   const d = new Date()
@@ -42,6 +48,7 @@ function ReservasiForm() {
   const [name, setName] = useState('')
   const [date, setDate] = useState(todayISO())
   const [timeSlot, setTimeSlot] = useState(TIME_SLOTS[0])
+  const [paymentMethod, setPaymentMethod] = useState(PAYMENT_METHODS[0])
 
   const estimate = useMemo(() => liters * SITE.pricePerLiter, [liters])
 
@@ -76,10 +83,11 @@ function ReservasiForm() {
       `Alamat: ${address || '-'}`,
       `Tanggal: ${date}`,
       `Jam: ${timeSlot}`,
+      `Metode Pembayaran: ${paymentMethod}`,
       ``,
       `Mohon dikonfirmasi jadwalnya ya, terima kasih!`,
     ].join('\n')
-  }, [name, liters, estimate, city, address, date, timeSlot])
+  }, [name, liters, estimate, city, address, date, timeSlot, paymentMethod])
 
   return (
     <div className="px-6 sm:px-8 pt-24 sm:pt-32 pb-20 max-w-3xl mx-auto">
@@ -328,6 +336,32 @@ function ReservasiForm() {
               ))}
             </div>
 
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-1.5">
+              <Wallet className="w-3.5 h-3.5 text-accent dark:text-accent-light" /> Metode Pembayaran
+            </label>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 mb-3">
+              {PAYMENT_METHODS.map((method) => (
+                <button
+                  key={method}
+                  onClick={() => setPaymentMethod(method)}
+                  className={`px-3 py-2.5 rounded-xl text-sm font-medium border transition-all duration-200 text-center ${
+                    paymentMethod === method
+                      ? 'bg-accent text-white border-accent'
+                      : 'bg-white dark:bg-white/[0.03] text-gray-700 dark:text-gray-300 border-gray-200 dark:border-white/10 hover:border-accent/40'
+                  }`}
+                >
+                  {method}
+                </button>
+              ))}
+            </div>
+            {paymentMethod !== PAYMENT_METHODS[0] && (
+              <p className="text-xs text-gray-500 dark:text-gray-400 mb-8 -mt-1">
+                Nomor rekening/e-wallet akan dikonfirmasi admin kami langsung lewat WhatsApp
+                saat reservasi Anda dijadwalkan — bayar tunai tetap bisa dipilih kapan saja.
+              </p>
+            )}
+            {paymentMethod === PAYMENT_METHODS[0] && <div className="mb-8" />}
+
             <div className="flex gap-3">
               <button
                 onClick={() => setStep(1)}
@@ -364,6 +398,7 @@ function ReservasiForm() {
                 ['Alamat', address || '-'],
                 ['Tanggal', date],
                 ['Jam', timeSlot],
+                ['Metode Pembayaran', paymentMethod],
               ].map(([label, value]) => (
                 <div key={label} className="flex items-start justify-between gap-4 pb-3 border-b border-gray-100 dark:border-white/5 last:border-0 last:pb-0">
                   <span className="text-gray-500 dark:text-gray-400 flex-shrink-0">{label}</span>

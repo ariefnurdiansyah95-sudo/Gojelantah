@@ -14,6 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${WEBSITE_URL}/`, lastModified: now, changeFrequency: 'weekly', priority: 1 },
     { url: `${WEBSITE_URL}/tentang`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${WEBSITE_URL}/reservasi`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${WEBSITE_URL}/mitra-bisnis`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${WEBSITE_URL}/kontak`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${WEBSITE_URL}/artikel`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
   ]

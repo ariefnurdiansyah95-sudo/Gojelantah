@@ -443,6 +443,12 @@ export default function HomePage() {
                 Chat WhatsApp Langsung
               </a>
             </div>
+            <Link
+              href="/mitra-bisnis"
+              className="inline-block mt-6 text-sm font-medium text-accent dark:text-accent-light hover:underline"
+            >
+              Punya usaha dengan volume besar (warteg, restoran, katering)? Cek Program Mitra Bisnis →
+            </Link>
           </div>
         </Reveal>
       </section>

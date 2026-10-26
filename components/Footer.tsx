@@ -7,6 +7,7 @@ const FOOTER_LINKS = [
   { href: '/tentang', label: 'Tentang Kami' },
   { href: '/#area-layanan', label: 'Area Layanan' },
   { href: '/reservasi', label: 'Reservasi' },
+  { href: '/mitra-bisnis', label: 'Mitra Bisnis' },
   { href: '/artikel', label: 'Artikel' },
   { href: '/kontak', label: 'Kontak' },
 ]
