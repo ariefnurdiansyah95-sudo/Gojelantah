@@ -28,14 +28,41 @@ function ReservasiForm() {
 
   const [liters, setLiters] = useState(initialLiters)
   const [city, setCity] = useState<string>(SITE.serviceAreas[0])
-  const [address, setAddress] = useState('')
+
+  // Alamat dipecah jadi field-field terpisah (bukan 1 textarea bebas lagi)
+  // biar user tinggal isi per-bagian, gak perlu mikirin format/urutan
+  // penulisan alamat sendiri — lebih cepet diisi & lebih gampang dibaca
+  // driver pas jemput.
+  const [streetName, setStreetName] = useState('')
+  const [houseNumber, setHouseNumber] = useState('')
+  const [rt, setRt] = useState('')
+  const [rw, setRw] = useState('')
+  const [patokan, setPatokan] = useState('')
+
   const [name, setName] = useState('')
   const [date, setDate] = useState(todayISO())
   const [timeSlot, setTimeSlot] = useState(TIME_SLOTS[0])
 
   const estimate = useMemo(() => liters * SITE.pricePerLiter, [liters])
 
-  const canGoStep2 = address.trim().length > 3
+  // Rangkai semua field alamat jadi satu string rapi — ini yang dipakai di
+  // ringkasan step 3 & pesan WhatsApp, user gak perlu susun sendiri.
+  const address = useMemo(() => {
+    const line1Parts = [streetName.trim()]
+    if (houseNumber.trim()) line1Parts.push(`No. ${houseNumber.trim()}`)
+    const line1 = line1Parts.filter(Boolean).join(' ')
+
+    const rtRw = [rt.trim() ? `RT ${rt.trim()}` : '', rw.trim() ? `RW ${rw.trim()}` : '']
+      .filter(Boolean)
+      .join('/')
+
+    const mainParts = [line1, rtRw, city].filter(Boolean)
+    let full = mainParts.join(', ')
+    if (patokan.trim()) full += ` (Patokan: ${patokan.trim()})`
+    return full
+  }, [streetName, houseNumber, rt, rw, patokan, city])
+
+  const canGoStep2 = streetName.trim().length > 2 && houseNumber.trim().length > 0
   const canGoStep3 = date.length > 0 && timeSlot.length > 0
 
   const waMessage = useMemo(() => {
@@ -160,19 +187,89 @@ function ReservasiForm() {
               ))}
             </div>
 
-            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-              Alamat lengkap penjemputan
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-1.5">
+              <MapPin className="w-3.5 h-3.5 text-accent dark:text-accent-light" /> Alamat Penjemputan
             </label>
-            <div className="relative mb-7">
-              <MapPin className="absolute left-3.5 top-3.5 w-4 h-4 text-gray-400" />
-              <textarea
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                placeholder="Nama jalan, nomor rumah, RT/RW, kelurahan..."
-                rows={3}
-                className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 resize-none"
+            <p className="text-xs text-gray-500 dark:text-gray-400 mb-3 -mt-1">
+              Isi per-bagian aja, nanti otomatis kami susun jadi alamat lengkap.
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-3 mb-3">
+              <div>
+                <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">
+                  Nama Jalan
+                </label>
+                <input
+                  type="text"
+                  value={streetName}
+                  onChange={(e) => setStreetName(e.target.value)}
+                  placeholder="Mis. Jl. Mawar Raya"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
+                />
+              </div>
+              <div className="sm:w-28">
+                <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">
+                  No. Rumah
+                </label>
+                <input
+                  type="text"
+                  value={houseNumber}
+                  onChange={(e) => setHouseNumber(e.target.value)}
+                  placeholder="12A"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 mb-3">
+              <div>
+                <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">
+                  RT <span className="text-gray-400 font-normal">(opsional)</span>
+                </label>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  value={rt}
+                  onChange={(e) => setRt(e.target.value)}
+                  placeholder="005"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">
+                  RW <span className="text-gray-400 font-normal">(opsional)</span>
+                </label>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  value={rw}
+                  onChange={(e) => setRw(e.target.value)}
+                  placeholder="003"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
+                />
+              </div>
+            </div>
+
+            <div className="mb-3">
+              <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">
+                Patokan <span className="text-gray-400 font-normal">(opsional, biar driver gampang nyari)</span>
+              </label>
+              <input
+                type="text"
+                value={patokan}
+                onChange={(e) => setPatokan(e.target.value)}
+                placeholder="Mis. Sebelah minimarket, dekat masjid Al-Ikhlas"
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
               />
             </div>
+
+            {(streetName.trim() || houseNumber.trim()) && (
+              <div className="value-frame px-4 py-3 mb-7 text-xs text-gray-600 dark:text-gray-300">
+                <span className="font-semibold text-gray-500 dark:text-gray-400">Preview alamat: </span>
+                {address}
+              </div>
+            )}
+            {!(streetName.trim() || houseNumber.trim()) && <div className="mb-7" />}
 
             <button
               onClick={() => canGoStep2 && setStep(2)}

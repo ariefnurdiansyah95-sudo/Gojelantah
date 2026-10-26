@@ -4,6 +4,7 @@ import Navbar from '@/components/Navbar'
 import ScrollProgress from '@/components/ScrollProgress'
 import WhatsAppFloat from '@/components/WhatsAppFloat'
 import Footer from '@/components/Footer'
+import PwaRegister from '@/components/PwaRegister'
 import { Providers } from './providers'
 
 // Catatan: font sengaja TIDAK di-load lewat next/font/google (butuh akses
@@ -97,6 +98,17 @@ export const metadata: Metadata = {
 
   category: 'business',
 
+  // PWA — bikin Safari iOS kasih treatment "app" yang bener pas situs ini
+  // di-"Add to Home Screen" (status bar nyatu sama warna tema, gak ada
+  // address bar Safari nongol, title di bawah icon home-screen bukan URL).
+  // `apple-icon.png` (180x180, full square opaque) diambil otomatis lewat
+  // App Router file convention, gak perlu disebut manual di sini.
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'GoJelantah',
+  },
+
   // `verification` — placeholder kosong sengaja gak diisi kode verifikasi
   // palsu. User perlu isi sendiri lewat Google Search Console (Settings >
   // Ownership verification > HTML tag), lalu tempel kode-nya di sini,
@@ -175,6 +187,7 @@ export default function RootLayout({
         />
       </head>
       <body className="font-sans antialiased overflow-x-hidden">
+        <PwaRegister />
         <Providers>
           <div className="app-shell relative flex flex-col overflow-hidden">
             <ScrollProgress />
