@@ -81,43 +81,52 @@ export default function Navbar() {
           })}
         </nav>
 
-        <div className="relative md:hidden" ref={menuRef}>
-          <button
-            onClick={() => setMenuOpen((v) => !v)}
-            aria-expanded={menuOpen}
-            className={`flex items-center gap-1.5 pl-1.5 pr-2.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap text-white transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-0 ${
-              menuOpen ? 'bg-white/15' : 'opacity-80 hover:opacity-100 hover:bg-white/10'
-            }`}
-          >
-            Menu
-            <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-300 ${menuOpen ? 'rotate-180' : ''}`} />
-          </button>
-
-          {menuOpen && (
-            <div className="absolute top-full mt-2 right-0 w-56 rounded-2xl border border-white/10 bg-[#0a1d15]/95 backdrop-blur-xl shadow-xl shadow-black/40 p-2 origin-top-right animate-dropdown-in">
-              {MENU_LINKS.map((link) => {
-                const active = isLinkActive(link.href)
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setMenuOpen(false)}
-                    className={`flex items-center gap-3 px-2.5 py-2 rounded-xl transition-all duration-200 ${
-                      active ? 'bg-white/10' : 'hover:bg-white/5'
-                    }`}
-                  >
-                    <span className={`text-sm font-semibold ${active ? 'text-white' : 'text-white/80'}`}>
-                      {link.label}
-                    </span>
-                    {active && <span className="ml-auto w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0" />}
-                  </Link>
-                )
-              })}
-            </div>
-          )}
-        </div>
-
+        {/* Satu grup di sisi kanan (menu mobile + dot + toggle tema + CTA)
+            — sebelumnya tombol "Menu" mobile ada di luar grup ini sebagai
+            flex-child TERPISAH, jadi kena `justify-between` ikut nyebar ke
+            TENGAH navbar (di antara logo & grup kanan), padahal nav desktop
+            di sebelahnya lagi `hidden` di mobile jadi gak makan tempat —
+            hasilnya tombol Menu kelihatan "ngambang" sendirian di tengah.
+            Sekarang semuanya satu flex-child kanan, jadi di mobile cuma ada
+            2 child (logo kiri, grup ini kanan) — Menu nempel rapi di
+            pinggir bareng tombol-tombol lain. */}
         <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+          <div className="relative md:hidden" ref={menuRef}>
+            <button
+              onClick={() => setMenuOpen((v) => !v)}
+              aria-expanded={menuOpen}
+              className={`flex items-center gap-1.5 pl-1.5 pr-2.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap text-white transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-0 ${
+                menuOpen ? 'bg-white/15' : 'opacity-80 hover:opacity-100 hover:bg-white/10'
+              }`}
+            >
+              Menu
+              <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-300 ${menuOpen ? 'rotate-180' : ''}`} />
+            </button>
+
+            {menuOpen && (
+              <div className="absolute top-full mt-2 right-0 w-56 rounded-2xl border border-white/10 bg-[#0a1d15]/95 backdrop-blur-xl shadow-xl shadow-black/40 p-2 origin-top-right animate-dropdown-in">
+                {MENU_LINKS.map((link) => {
+                  const active = isLinkActive(link.href)
+                  return (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => setMenuOpen(false)}
+                      className={`flex items-center gap-3 px-2.5 py-2 rounded-xl transition-all duration-200 ${
+                        active ? 'bg-white/10' : 'hover:bg-white/5'
+                      }`}
+                    >
+                      <span className={`text-sm font-semibold ${active ? 'text-white' : 'text-white/80'}`}>
+                        {link.label}
+                      </span>
+                      {active && <span className="ml-auto w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0" />}
+                    </Link>
+                  )
+                })}
+              </div>
+            )}
+          </div>
+
           {/* Dot hijau pulsing — penanda "website sedang online", sengaja
               diadain lagi sesuai request (sebelumnya pernah dihapus). */}
           <span className="hidden sm:flex relative h-2 w-2 flex-shrink-0" aria-hidden="true" title="Website online">
