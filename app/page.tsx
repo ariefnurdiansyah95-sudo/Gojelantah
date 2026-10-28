@@ -19,6 +19,7 @@ import HeroArt from '@/components/HeroArt'
 import AreaLayananSection from '@/components/AreaLayananSection'
 import { SITE, buildWhatsAppLink, formatRupiah } from '@/lib/site'
 import { PHOTOS } from '@/lib/photos'
+import { REVIEWS } from '@/lib/reviews'
 
 const BENEFITS = [
   {
@@ -50,30 +51,6 @@ const BENEFITS = [
     icon: MapPin,
     title: 'Cakupan Se-Jabodetabek',
     desc: 'Jakarta, Bogor, Depok, Tangerang, dan Bekasi — satu armada, satu nomor WA.',
-  },
-]
-
-const TESTIMONIALS = [
-  {
-    name: 'Bu Rahma',
-    initials: 'BR',
-    role: 'Pemilik Warteg, Cipinang',
-    quote:
-      'Dulu jelantah numpuk di belakang dapur, sekarang tiap minggu dijemput GoJelantah. Lumayan buat tambahan belanja, prosesnya juga cepet banget.',
-  },
-  {
-    name: 'Pak Yanto',
-    initials: 'PY',
-    role: 'Katering Rumahan, Bekasi',
-    quote:
-      'Harganya oke, bisa nego juga pas dateng. Tinggal chat WA, jadwal langsung diatur, pas dateng ditimbang depan mata, bayar cash.',
-  },
-  {
-    name: 'Mbak Dian',
-    initials: 'MD',
-    role: 'Ibu Rumah Tangga, Depok',
-    quote:
-      'Awalnya cuma mau buang jelantah biar gak nyumbat saluran air, eh malah dibeli. Sekarang jadi rutin nabung jelantah tiap bulan.',
   },
 ]
 
@@ -373,31 +350,50 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ================= TESTIMONIALS ================= */}
+      {/* ================= TESTIMONIALS (ulasan asli Google Maps) ================= */}
       <section className="section-tint-emerald px-6 sm:px-8 py-14 sm:py-20 overflow-hidden">
         <div className="max-w-6xl mx-auto">
           <Reveal className="text-center mb-10">
+            <div className="inline-flex items-center gap-2 glass-card px-4 py-1.5 rounded-full mb-4">
+              <div className="flex items-center gap-0.5">
+                {Array.from({ length: 5 }).map((_, idx) => (
+                  <Star key={idx} className="w-3.5 h-3.5 fill-gold text-gold" />
+                ))}
+              </div>
+              <span className="text-sm font-semibold text-gray-800 dark:text-gray-200">5.0</span>
+              <span className="text-xs text-gray-500 dark:text-gray-400">di Google Maps</span>
+            </div>
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">Kata Mereka</h2>
-            <p className="mt-3 text-gray-600 dark:text-gray-400">Pelanggan rumahan & usaha yang udah langganan jemput jelantah.</p>
+            <p className="mt-3 text-gray-600 dark:text-gray-400">
+              Ulasan asli pelanggan kami di Google Maps — bukan testimoni karangan.
+            </p>
+            <a
+              href={SITE.googleReviewUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block mt-2 text-xs font-semibold text-accent dark:text-accent-light hover:underline"
+            >
+              Lihat &amp; Tulis Ulasan di Google Maps →
+            </a>
           </Reveal>
 
-          <div className="grid sm:grid-cols-3 gap-5">
-            {TESTIMONIALS.map((t, i) => (
-              <Reveal key={t.name} delay={i * 80}>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {REVIEWS.map((r, i) => (
+              <Reveal key={r.name} delay={i * 80}>
                 <div className="glass-card p-6 h-full">
                   <div className="flex items-center gap-1 mb-3">
-                    {Array.from({ length: 5 }).map((_, idx) => (
+                    {Array.from({ length: r.rating }).map((_, idx) => (
                       <Star key={idx} className="w-3.5 h-3.5 fill-gold text-gold" />
                     ))}
                   </div>
-                  <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-5">&ldquo;{t.quote}&rdquo;</p>
+                  <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-5">&ldquo;{r.quote}&rdquo;</p>
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-accent to-gold flex items-center justify-center flex-shrink-0 shadow-sm">
-                      <span className="text-xs font-bold text-white">{t.initials}</span>
+                      <span className="text-xs font-bold text-white">{r.initials}</span>
                     </div>
                     <div>
-                      <p className="text-sm font-semibold text-gray-900 dark:text-white">{t.name}</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">{t.role}</p>
+                      <p className="text-sm font-semibold text-gray-900 dark:text-white">{r.name}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">Ulasan Google Maps</p>
                     </div>
                   </div>
                 </div>
