@@ -23,8 +23,8 @@ import { PHOTOS } from '@/lib/photos'
 const BENEFITS = [
   {
     icon: Wallet,
-    title: 'Harga Flat & Transparan',
-    desc: `${formatRupiah(SITE.pricePerLiter)} per liter, berapa pun jumlahnya — tanpa syarat minimum, tanpa tawar-menawar.`,
+    title: 'Harga Nego & Transparan',
+    desc: `Mulai ${formatRupiah(SITE.pricePerLiter)} per liter, berapa pun jumlahnya — harga final bisa nego sesuai kondisi & volume, tanpa syarat minimum.`,
   },
   {
     icon: Truck,
@@ -66,7 +66,7 @@ const TESTIMONIALS = [
     initials: 'PY',
     role: 'Katering Rumahan, Bekasi',
     quote:
-      'Enaknya harganya flat, gak perlu nego. Tinggal chat WA, jadwal langsung diatur, pas dateng ditimbang depan mata, bayar cash.',
+      'Harganya oke, bisa nego juga pas dateng. Tinggal chat WA, jadwal langsung diatur, pas dateng ditimbang depan mata, bayar cash.',
   },
   {
     name: 'Mbak Dian',
@@ -80,7 +80,7 @@ const TESTIMONIALS = [
 const FAQ_ITEMS = [
   {
     question: 'Berapa harga beli minyak jelantah di GoJelantah?',
-    answer: `Harga kami flat Rp 7.500 per liter, berlaku untuk semua jumlah — baik 2 liter dari rumah tangga maupun ratusan liter dari resto/usaha katering. Tidak ada syarat minimum liter.`,
+    answer: `Harga kami mulai dari Rp 7.000 per liter — harga final bisa nego langsung di tempat, tergantung kondisi dan volume jelantah Anda. Berlaku untuk semua jumlah, baik 2 liter dari rumah tangga maupun ratusan liter dari resto/usaha katering, dan tidak ada syarat minimum liter.`,
   },
   {
     question: 'Apakah penjemputan dikenakan biaya?',
@@ -110,12 +110,12 @@ const FAQ_ITEMS = [
   {
     question: 'Jelantah saya kondisinya sudah gelap & bau banget, masih diterima?',
     answer:
-      'Masih. Baik jelantah yang masih relatif bagus maupun yang sudah pekat dan berbau, tetap kami terima dengan harga flat yang sama — proses penyaringan dan pengolahan lanjutan memang dirancang untuk menangani berbagai kondisi minyak bekas.',
+      'Masih. Baik jelantah yang masih relatif bagus maupun yang sudah pekat dan berbau, tetap kami terima — harganya bisa menyesuaikan (nego) tergantung kondisi minyaknya, karena proses penyaringan dan pengolahan lanjutan memang dirancang untuk menangani berbagai kondisi minyak bekas.',
   },
   {
     question: 'Bagaimana kalau usaha saya menghasilkan jelantah dalam jumlah besar tiap minggu?',
     answer:
-      'Tidak masalah — kami melayani rumah tangga sampai usaha dengan volume ratusan liter per bulan, dengan harga flat yang sama untuk semua skala. Jadwal jemput rutin (mingguan/bulanan) juga bisa diatur lewat WhatsApp sesuai kecepatan jelantah menumpuk di dapur Anda.',
+      'Tidak masalah — kami melayani rumah tangga sampai usaha dengan volume ratusan liter per bulan, dan harganya bisa dinego sesuai skala: makin besar dan rutin volumenya, makin terbuka peluang dapat harga yang lebih baik. Jadwal jemput rutin (mingguan/bulanan) juga bisa diatur lewat WhatsApp — cek juga halaman Mitra Bisnis kami.',
   },
   {
     question: 'Apakah jelantah saya dicampur dengan jelantah pelanggan lain?',
@@ -125,7 +125,7 @@ const FAQ_ITEMS = [
   {
     question: 'Apa bedanya GoJelantah dengan pengepul jelantah lain?',
     answer:
-      'Tiga hal utama: harga flat tanpa nego dan tanpa syarat minimum liter, penjemputan gratis ke lokasi (bukan Anda yang harus antar), dan proses yang transparan — ditimbang di depan Anda, dibayar tunai saat itu juga, tanpa menunggu transfer atau proses administrasi tambahan.',
+      'Tiga hal utama: harga transparan mulai Rp 7.000/liter yang bisa dinego sesuai kondisi & volume (bukan asal pukul rata), tanpa syarat minimum liter; penjemputan gratis ke lokasi (bukan Anda yang harus antar); dan proses yang transparan — ditimbang di depan Anda, dibayar tunai saat itu juga, tanpa menunggu transfer atau proses administrasi tambahan.',
   },
 ]
 
@@ -183,7 +183,7 @@ export default function HomePage() {
               <Reveal delay={160}>
                 <p className="mt-6 text-base sm:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
                   Minyak jelantah di dapur Anda bukan sampah — itu uang yang belum dicairkan. GoJelantah datang
-                  jemput gratis, timbang di tempat, bayar tunai {formatRupiah(SITE.pricePerLiter)}/liter.
+                  jemput gratis, timbang di tempat, bayar tunai mulai {formatRupiah(SITE.pricePerLiter)}/liter (nego).
                 </p>
               </Reveal>
 
@@ -210,7 +210,7 @@ export default function HomePage() {
           <Reveal delay={320}>
             <div className="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto lg:max-w-none">
               {[
-                { value: `${formatRupiah(SITE.pricePerLiter)}`, label: 'per liter, flat' },
+                { value: `Mulai ${formatRupiah(SITE.pricePerLiter)}`, label: 'per liter, nego' },
                 { value: 'Gratis', label: 'jemput ke lokasi' },
                 { value: '1×24 Jam', label: 'respon reservasi' },
                 { value: '5 Kota', label: 'cakupan Jabodetabek' },

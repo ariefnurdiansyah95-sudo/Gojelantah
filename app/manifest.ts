@@ -9,7 +9,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: 'GoJelantah — Jemput & Beli Minyak Jelantah',
     short_name: 'GoJelantah',
-    description: 'Jemput gratis, bayar tunai di tempat, harga flat Rp 7.500/liter se-Jabodetabek.',
+    description: 'Jemput gratis, bayar tunai di tempat, harga mulai Rp 7.000/liter (nego) se-Jabodetabek.',
     start_url: '/',
     scope: '/',
     display: 'standalone',

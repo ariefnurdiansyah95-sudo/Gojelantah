@@ -23,7 +23,7 @@ const MISSION = [
   {
     icon: HeartHandshake,
     title: 'Membayar Setara',
-    desc: 'Setiap liter yang dijemput dibayar tunai dengan harga flat, karena kami percaya jelantah Anda layak dihargai.',
+    desc: 'Setiap liter yang dijemput dibayar tunai dengan harga yang adil dan bisa dinego, karena kami percaya jelantah Anda layak dihargai sesuai kondisinya.',
   },
 ]
 

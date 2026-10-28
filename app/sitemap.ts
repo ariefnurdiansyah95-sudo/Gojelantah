@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { ARTICLES } from '@/lib/articles'
 
-const WEBSITE_URL = (process.env.NEXT_PUBLIC_WEBSITE_URL || 'https://gojelantah.vercel.app').replace(/\/$/, '')
+const WEBSITE_URL = (process.env.NEXT_PUBLIC_WEBSITE_URL || 'https://www.gojelantah.com').replace(/\/$/, '')
 
 // File ini otomatis di-serve Next.js App Router sebagai /sitemap.xml.
 // Dibikin terprogram (bukan XML statis) biar kalau nanti nambah artikel

@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Droplets, MapPin, MessageCircle, Clock, AtSign } from 'lucide-react'
-import { SITE, buildWhatsAppLink } from '@/lib/site'
+import { SITE, buildWhatsAppLink, formatRupiah } from '@/lib/site'
 
 const FOOTER_LINKS = [
   { href: '/', label: 'Beranda' },
@@ -86,8 +86,8 @@ export default function Footer() {
           <div>
             <p className="text-xs font-bold uppercase tracking-wide text-white/40 mb-4">Harga Jemput</p>
             <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-4">
-              <p className="text-2xl font-bold text-white">Rp 7.500<span className="text-sm font-medium text-white/50">/liter</span></p>
-              <p className="text-xs text-white/50 mt-1">Flat, tanpa syarat minimum liter.</p>
+              <p className="text-2xl font-bold text-white">Mulai {formatRupiah(SITE.pricePerLiter)}<span className="text-sm font-medium text-white/50">/liter</span></p>
+              <p className="text-xs text-white/50 mt-1">Nego, tanpa syarat minimum liter.</p>
             </div>
             <a
               href="https://instagram.com"

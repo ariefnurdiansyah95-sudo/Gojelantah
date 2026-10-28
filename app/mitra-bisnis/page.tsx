@@ -37,7 +37,7 @@ const BENEFITS = [
   {
     icon: TrendingUp,
     title: 'Skema Volume Besar',
-    desc: 'Harga flat Rp 7.500/liter tetap berlaku seperti biasa, plus kemungkinan skema tambahan untuk volume rutin yang besar — didiskusikan langsung sesuai kebutuhan usaha Anda.',
+    desc: 'Harga mulai Rp 7.000/liter dan sifatnya nego — volume rutin yang besar biasanya punya peluang lebih baik untuk dapat harga yang lebih tinggi, didiskusikan langsung sesuai kebutuhan usaha Anda.',
   },
   {
     icon: Headset,
@@ -253,8 +253,8 @@ export default function MitraBisnisPage() {
             </div>
 
             <div className="value-frame px-4 py-3 text-xs text-gray-600 dark:text-gray-300">
-              Harga dasar tetap flat <strong>{formatRupiah(SITE.pricePerLiter)}/liter</strong>,
-              tanpa syarat minimum — skema tambahan untuk volume rutin besar akan dibahas
+              Harga dasar mulai <strong>{formatRupiah(SITE.pricePerLiter)}/liter</strong> (nego),
+              tanpa syarat minimum — skema harga untuk volume rutin besar akan dibahas
               langsung lewat WhatsApp setelah form ini dikirim.
             </div>
 

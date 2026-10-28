@@ -2,7 +2,7 @@
 
 import { Suspense, useMemo, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { Droplets, MapPin, CalendarClock, CheckCircle2, MessageCircle, ArrowRight, ArrowLeft, User, Wallet } from 'lucide-react'
+import { Droplets, MapPin, CalendarClock, CheckCircle2, MessageCircle, ArrowRight, ArrowLeft, User, Wallet, Star } from 'lucide-react'
 import Reveal from '@/components/Reveal'
 import { SITE, buildWhatsAppLink, formatRupiah } from '@/lib/site'
 
@@ -78,7 +78,7 @@ function ReservasiForm() {
       ``,
       `Nama: ${name || '-'}`,
       `Perkiraan jumlah: ${liters} liter`,
-      `Estimasi dibayar: ${formatRupiah(estimate)}`,
+      `Estimasi awal: ${formatRupiah(estimate)} (bisa nego di tempat)`,
       `Kota: ${city}`,
       `Alamat: ${address || '-'}`,
       `Tanggal: ${date}`,
@@ -168,15 +168,18 @@ function ReservasiForm() {
               />
             </div>
 
-            <div className="value-frame p-5 mb-7 flex items-center justify-between">
+            <div className="value-frame p-5 mb-2 flex items-center justify-between">
               <div>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Estimasi Anda terima</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Estimasi awal</p>
                 <p className="text-2xl font-bold text-gray-900 dark:text-white">{formatRupiah(estimate)}</p>
               </div>
               <p className="text-xs text-gray-500 dark:text-gray-400 text-right max-w-[40%]">
-                {liters} liter × {formatRupiah(SITE.pricePerLiter)}
+                {liters} liter × mulai {formatRupiah(SITE.pricePerLiter)}
               </p>
             </div>
+            <p className="text-[11px] text-gray-400 dark:text-gray-500 mb-7">
+              Harga final bisa nego di tempat, tergantung kondisi & volume jelantah.
+            </p>
 
             <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Kota</label>
             <div className="flex flex-wrap gap-2 mb-6">
@@ -393,7 +396,7 @@ function ReservasiForm() {
               {[
                 ['Nama', name || '-'],
                 ['Jumlah Jelantah', `${liters} liter`],
-                ['Estimasi Dibayar', formatRupiah(estimate)],
+                ['Estimasi Awal', `${formatRupiah(estimate)} (nego)`],
                 ['Kota', city],
                 ['Alamat', address || '-'],
                 ['Tanggal', date],
@@ -411,6 +414,33 @@ function ReservasiForm() {
               Setelah klik tombol di bawah, pesan reservasi ini otomatis tersusun dan siap dikirim ke
               WhatsApp tim GoJelantah ({SITE.whatsappLocal}) untuk dikonfirmasi.
             </p>
+
+            {/* Ajakan ulasan Google — SENGAJA opsional, bukan syarat buat lanjut
+                kirim reservasi (keputusan user, 2026-10-28). Link-nya buka
+                halaman tulis-ulasan RESMI Google (format g.page/r/.../review)
+                di tab baru — rating & komentarnya diisi pengunjung sendiri
+                lewat akun Google mereka, bukan dikirim dari form di web ini. */}
+            <div className="rounded-2xl border border-gold/25 dark:border-gold/15 bg-gold/5 dark:bg-gold/[0.04] px-4 py-3.5 mb-6 flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full bg-gold/15 dark:bg-gold/15 flex items-center justify-center flex-shrink-0">
+                <Star className="w-4 h-4 text-gold dark:text-gold-light" fill="currentColor" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-semibold text-gray-800 dark:text-gray-200">
+                  Suka sama layanan kami?
+                </p>
+                <p className="text-[11px] text-gray-500 dark:text-gray-400">
+                  Bantu kami lewat rating &amp; ulasan asli di Google Maps (opsional).
+                </p>
+              </div>
+              <a
+                href={SITE.googleReviewUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-shrink-0 text-xs font-semibold text-gold dark:text-gold-light hover:underline whitespace-nowrap"
+              >
+                Tulis Ulasan →
+              </a>
+            </div>
 
             <div className="flex gap-3">
               <button

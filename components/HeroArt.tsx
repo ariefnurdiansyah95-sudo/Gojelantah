@@ -1,4 +1,5 @@
 import { Container, Droplets, Leaf, Wallet, Truck } from 'lucide-react'
+import { SITE, formatRupiah } from '@/lib/site'
 
 // Visual pendamping hero — bukan foto stok (di sandbox ini domain foto
 // eksternal kayak Unsplash/Google diblokir network-nya, jadi gak bisa
@@ -53,8 +54,8 @@ export default function HeroArt() {
           <Wallet className="w-4 h-4 text-accent dark:text-accent-light" />
         </div>
         <div>
-          <p className="text-xs font-bold text-gray-900 dark:text-white whitespace-nowrap">Rp 7.500/Liter</p>
-          <p className="text-[10px] text-gray-500 dark:text-gray-400">Harga flat</p>
+          <p className="text-xs font-bold text-gray-900 dark:text-white whitespace-nowrap">Mulai {formatRupiah(SITE.pricePerLiter)}/Liter</p>
+          <p className="text-[10px] text-gray-500 dark:text-gray-400">Nego di tempat</p>
         </div>
       </div>
 

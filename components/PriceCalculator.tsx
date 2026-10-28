@@ -26,9 +26,9 @@ export default function PriceCalculator() {
 
   const waMessage = useMemo(
     () =>
-      `Halo GoJelantah, saya mau reservasi jemput minyak jelantah sekitar ${liters} liter (estimasi ${formatRupiah(
+      `Halo GoJelantah, saya mau reservasi jemput minyak jelantah sekitar ${liters} liter (estimasi awal ${formatRupiah(
         estimate
-      )}).`,
+      )}, bisa nego).`,
     [liters, estimate]
   )
 
@@ -95,7 +95,7 @@ export default function PriceCalculator() {
             </div>
           </div>
           <p className="text-xs text-gray-500 dark:text-gray-400">
-            {MIN_LITERS}–{MAX_LITERS} liter · harga flat {formatRupiah(SITE.pricePerLiter)}/liter, berapa pun jumlahnya.
+            {MIN_LITERS}–{MAX_LITERS} liter · harga mulai {formatRupiah(SITE.pricePerLiter)}/liter (nego), berapa pun jumlahnya.
           </p>
         </div>
 
@@ -105,13 +105,16 @@ export default function PriceCalculator() {
             <Droplets className="w-4 h-4 text-accent dark:text-accent-light" />
           </div>
           <p className="text-xs font-bold uppercase tracking-wide text-accent dark:text-accent-light mb-2">
-            Estimasi Anda Terima
+            Estimasi Awal
           </p>
           <p className="text-4xl sm:text-[2.6rem] font-bold text-gray-900 dark:text-white leading-tight tabular-nums">
             {formatRupiah(estimate)}
           </p>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1.5 mb-6">
-            {liters} liter × {formatRupiah(SITE.pricePerLiter)}
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 mb-1.5">
+            {liters} liter × mulai {formatRupiah(SITE.pricePerLiter)}
+          </p>
+          <p className="text-[11px] text-gray-400 dark:text-gray-500 mb-6">
+            Harga final bisa nego di tempat, tergantung kondisi & volume.
           </p>
 
           <div className="flex flex-col gap-2.5">

@@ -66,7 +66,7 @@ export const ARTICLES: Article[] = [
       'Setelah dikumpulkan, minyak jelantah melewati tahap penyaringan untuk memisahkan air, ampas, dan kotoran lain. Minyak yang sudah bersih kemudian diproses lewat reaksi kimia bernama transesterifikasi, di mana minyak direaksikan dengan alkohol (biasanya metanol) dan katalis untuk menghasilkan biodiesel serta produk sampingan berupa gliserin.',
       'Biodiesel hasil olahan jelantah punya karakteristik pembakaran yang lebih bersih dibanding solar konvensional, dan karena bahan bakunya adalah minyak bekas, proses ini juga membantu mengurangi limbah yang seharusnya dibuang.',
       'Selain jadi biodiesel, sebagian kecil jelantah olahan juga dimanfaatkan sebagai bahan baku sabun, pelumas, dan lilin — menunjukkan bahwa "minyak bekas" sebenarnya punya banyak jalur daur ulang bernilai ekonomi.',
-      'Inilah alasan GoJelantah berani membeli jelantah Anda dengan harga flat: karena di ujung rantai pasokan, minyak ini benar-benar diubah jadi sesuatu yang bernilai, bukan sekadar dikumpulkan tanpa tujuan.',
+      'Inilah alasan GoJelantah berani membeli jelantah Anda dengan harga yang adil dan bisa dinego: karena di ujung rantai pasokan, minyak ini benar-benar diubah jadi sesuatu yang bernilai, bukan sekadar dikumpulkan tanpa tujuan.',
     ],
   },
   {
@@ -110,7 +110,7 @@ export const ARTICLES: Article[] = [
     content: [
       'Usaha kuliner — mulai dari warung tegal, gerai gorengan, restoran, sampai dapur katering — biasanya menghasilkan jelantah dalam jumlah jauh lebih besar dibanding rumah tangga biasa. Kalau tidak dikelola, jelantah dalam jumlah besar ini sering berakhir jadi masalah: bikin saluran air mampet, bau menyengat di area dapur, dan risiko teguran kalau dibuang sembarangan.',
       'Padahal, volume besar ini justru jadi keuntungan kalau dikelola dengan benar. Semakin banyak dan semakin rutin jelantah yang disetorkan, semakin besar juga pemasukan tambahan yang didapat — tanpa perlu effort tambahan selain menyimpannya dengan benar sebelum dijemput.',
-      'GoJelantah melayani penjemputan untuk semua skala, dari rumah tangga sampai usaha dengan volume ratusan liter per bulan, dengan harga flat yang sama — tidak ada negosiasi berbeda untuk pelanggan besar maupun kecil. Jadwal jemput juga bisa diatur rutin (misalnya mingguan atau bulanan) menyesuaikan kecepatan jelantah menumpuk di dapur Anda.',
+      'GoJelantah melayani penjemputan untuk semua skala, dari rumah tangga sampai usaha dengan volume ratusan liter per bulan — harganya bisa dinego, dan biasanya makin besar serta makin rutin volumenya, makin terbuka peluang dapat harga yang lebih baik. Jadwal jemput juga bisa diatur rutin (misalnya mingguan atau bulanan) menyesuaikan kecepatan jelantah menumpuk di dapur Anda.',
       'Buat pelaku usaha kuliner, ini bukan cuma soal kebersihan operasional — tapi juga nilai tambah yang bisa disebut ke pelanggan: usaha Anda mengelola limbah dapur secara bertanggung jawab, bukan membuangnya sembarangan ke lingkungan sekitar.',
     ],
   },

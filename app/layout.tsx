@@ -13,13 +13,14 @@ import { Providers } from './providers'
 // (`font-sans` / `font-serif`) yang serupa secara visual dan selalu
 // tersedia offline, tanpa risiko build gagal karena fetch font.
 
-// Domain produksi: https://gojelantah.vercel.app/ (dikonfirmasi user pas
-// setup SEO) — dipakai sebagai fallback kalau env var `NEXT_PUBLIC_
-// WEBSITE_URL` belum di-set di Vercel. Begitu user pindah ke domain
-// sendiri (mis. gojelantah.id), cukup set env var itu di Vercel project
-// settings, SEMUA metadata/sitemap/robots/JSON-LD di bawah otomatis ikut
-// pakai domain baru tanpa perlu edit kode lagi.
-const WEBSITE_URL = (process.env.NEXT_PUBLIC_WEBSITE_URL || 'https://gojelantah.vercel.app').replace(/\/$/, '')
+// Domain produksi: https://www.gojelantah.com (domain sendiri, user beli
+// & pasang 2026-10-28 — sebelumnya pakai subdomain gratis gojelantah.
+// vercel.app sejak Round 10). Dipakai sebagai fallback kalau env var
+// `NEXT_PUBLIC_WEBSITE_URL` belum di-set di Vercel. Kalau nanti domainnya
+// ganti lagi, cukup set env var itu di Vercel project settings, SEMUA
+// metadata/sitemap/robots/JSON-LD di bawah otomatis ikut pakai domain
+// baru tanpa perlu edit kode lagi.
+const WEBSITE_URL = (process.env.NEXT_PUBLIC_WEBSITE_URL || 'https://www.gojelantah.com').replace(/\/$/, '')
 
 const OG_IMAGE_URL = `${WEBSITE_URL}/images/og-image.jpg`
 
@@ -32,7 +33,7 @@ export const metadata: Metadata = {
   },
 
   description:
-    'GoJelantah menjemput minyak jelantah langsung dari rumah/usaha Anda se-Jabodetabek. Jemput gratis, bayar tunai di tempat, harga flat Rp 7.500/liter. Reservasi lewat WhatsApp, secepat klik.',
+    'GoJelantah menjemput minyak jelantah langsung dari rumah/usaha Anda se-Jabodetabek. Jemput gratis, bayar tunai di tempat, harga mulai Rp 7.000/liter (nego). Reservasi lewat WhatsApp, secepat klik.',
 
   keywords: [
     'jual minyak jelantah',
@@ -61,7 +62,7 @@ export const metadata: Metadata = {
     siteName: 'GoJelantah',
     title: 'GoJelantah — Jemput & Beli Minyak Jelantah Se-Jabodetabek',
     description:
-      'Jemput gratis, bayar tunai di tempat, harga flat Rp 7.500/liter. Reservasi lewat WhatsApp, secepat klik.',
+      'Jemput gratis, bayar tunai di tempat, harga mulai Rp 7.000/liter (nego). Reservasi lewat WhatsApp, secepat klik.',
     images: [
       {
         url: OG_IMAGE_URL,
@@ -76,7 +77,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'GoJelantah — Jemput & Beli Minyak Jelantah Se-Jabodetabek',
     description:
-      'Jemput gratis, bayar tunai di tempat, harga flat Rp 7.500/liter. Reservasi lewat WhatsApp, secepat klik.',
+      'Jemput gratis, bayar tunai di tempat, harga mulai Rp 7.000/liter (nego). Reservasi lewat WhatsApp, secepat klik.',
     images: [OG_IMAGE_URL],
   },
 
@@ -109,10 +110,14 @@ export const metadata: Metadata = {
     title: 'GoJelantah',
   },
 
-  // `verification` — placeholder kosong sengaja gak diisi kode verifikasi
-  // palsu. User perlu isi sendiri lewat Google Search Console (Settings >
-  // Ownership verification > HTML tag), lalu tempel kode-nya di sini,
-  // mis. verification: { google: 'kode-dari-search-console' }.
+  // Kode verifikasi Google Search Console (metode "HTML tag"), dikasih
+  // user langsung dari dashboard Search Console-nya sendiri — bukan kode
+  // palsu/karangan. Ini jadi <meta name="google-site-verification"
+  // content="..." /> di <head>, dibaca Google pas user klik "Verify" di
+  // Search Console setelah domain ini live.
+  verification: {
+    google: 'LPIFor90qCWewIaCyjMliPuAm4_LR4qTKkcV8GziJ7A',
+  },
 }
 
 export const viewport: Viewport = {
@@ -144,12 +149,12 @@ export default function RootLayout({
               '@id': `${WEBSITE_URL}/#business`,
               name: 'GoJelantah',
               description:
-                'Jasa jemput dan beli minyak jelantah se-Jabodetabek. Jemput gratis, bayar tunai di tempat, harga flat Rp 7.500/liter.',
+                'Jasa jemput dan beli minyak jelantah se-Jabodetabek. Jemput gratis, bayar tunai di tempat, harga mulai Rp 7.000/liter (nego sesuai kondisi & volume).',
               url: WEBSITE_URL,
               image: OG_IMAGE_URL,
               logo: `${WEBSITE_URL}/icon.png`,
               telephone: '+6281212084742',
-              priceRange: 'Rp 7.500/liter',
+              priceRange: 'Mulai Rp 7.000/liter (nego)',
               address: {
                 '@type': 'PostalAddress',
                 streetAddress: 'Jl. I Gusti Ngurah Rai No.20C, RT.8/RW.6, Cipinang Muara',
